@@ -1,15 +1,15 @@
 const typeDefs = /*GraphQL*/ `
     type User {
-        name:String,
+        name: String,
         id: ID,
-        token: String,
         profilePictureLink: String
     },
     type Mutation{
-        auth(token:String): User
+        auth(oauthToken: String!): String,
+        refreshAccessToken: String,
     },
     type Query{
-        getEvents(token:String):String
+        getEvents(token: String): String
     }
 `;
 

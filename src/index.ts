@@ -1,6 +1,5 @@
 import express from "express";
-import cors from "cors";
-import { FRONTEND_URL, MONGO_URI, PORT } from "./utils/config";
+import { MONGO_URI, PORT } from "./utils/config";
 import morgan from "morgan";
 import { connectToDatabase } from "./utils/db";
 import * as http from "http";
@@ -10,18 +9,19 @@ import typeDefs from "./graphql/schema";
 import resolvers from "./graphql/resolvers";
 import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
 import { expressMiddleware } from "@as-integrations/express5";
+import cookieParser from "cookie-parser";
 
 const main = async () => {
     await connectToDatabase(MONGO_URI);
 
     const app = express();
+
+    app.use(cookieParser());
     app.use(express.json());
 
     app.use(
         morgan(":method :url :status :res[content-length] - :response-time ms"),
     );
-
-    app.use(cors({ origin: FRONTEND_URL }));
 
     app.get("/ping", (_req, res) => {
         res.send("pong");
@@ -35,7 +35,16 @@ const main = async () => {
 
     await graphQLServer.start();
 
-    app.use("/graphql", expressMiddleware(graphQLServer));
+    app.use(
+        "/api/graphql",
+        expressMiddleware(graphQLServer, {
+            // eslint-disable-next-line @typescript-eslint/require-await
+            context: async ({ req, res }) => ({
+                req,
+                res,
+            }),
+        }),
+    );
 
     app.listen(PORT, () => {
         console.log(`Server running on port ${PORT}`);
