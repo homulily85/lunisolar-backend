@@ -9,7 +9,7 @@ import createContextString from "../utils/createContextString";
 import { createHash } from "crypto";
 import User from "../models/user";
 import RefreshToken from "../models/refreshToken";
-import { parseDurationToSeconds } from "../utils/parseDurationToSeconds";
+import { parseDurationToMiliseconds } from "../utils/parseDurationToMiliseconds";
 import InvalidCredentialError from "../utils/InvalidCredentialError";
 
 const getRefreshToken = async (token: string) => {
@@ -57,7 +57,7 @@ const getRefreshToken = async (token: string) => {
         revoked: false,
         expiresAt: new Date(
             Date.now() +
-                parseDurationToSeconds(REFRESH_TOKEN_LIFETIME).valueOf(),
+                parseDurationToMiliseconds(REFRESH_TOKEN_LIFETIME).valueOf(),
         ),
     }).save();
 

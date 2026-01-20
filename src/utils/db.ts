@@ -9,7 +9,7 @@ export const connectToDatabase = async (uri: string | undefined) => {
     }
     console.log("connecting to database URI:", uri);
     try {
-        await mongoose.connect(uri);
+        await mongoose.connect(uri, { dbName: "lunisolar" });
         console.log("connected to MongoDB");
     } catch (error: unknown) {
         if (error instanceof Error) {

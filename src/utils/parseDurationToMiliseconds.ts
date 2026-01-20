@@ -1,4 +1,4 @@
-export function parseDurationToSeconds(input: string): number {
+export function parseDurationToMiliseconds(input: string): number {
     if (!input) {
         throw new Error("Invalid duration");
     }
@@ -24,5 +24,5 @@ export function parseDurationToSeconds(input: string): number {
     };
 
     const multiplier = multipliers[unit];
-    return Math.floor(value * multiplier);
+    return Math.floor(value * multiplier * 1000);
 }

@@ -4,7 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="705039f1-b90b-437f-9143-8d8ef2f66af2" name="Changes" comment="Implement environment variable checks and add authentication token management" />
+    <list default="true" id="705039f1-b90b-437f-9143-8d8ef2f66af2" name="Changes" comment="Implement environment variable checks and add authentication token management">
+      <change afterPath="$PROJECT_DIR$/src/service/deleteRefreshToken.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/graphql/resolvers.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphql/resolvers.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/graphql/schema.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphql/schema.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/service/getRefreshToken.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/service/getRefreshToken.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/db.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/db.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/parseDurationToSeconds.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/parseDurationToMiliseconds.ts" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -121,7 +129,8 @@
       <workItem from="1767897484183" duration="2806000" />
       <workItem from="1768584920540" duration="20148000" />
       <workItem from="1768772770581" duration="2041000" />
-      <workItem from="1768840687840" duration="18549000" />
+      <workItem from="1768840687840" duration="19117000" />
+      <workItem from="1768904420092" duration="6970000" />
     </task>
     <task id="LOCAL-00001" summary="Add initial project setup with Express, Apollo Server, and MongoDB integration">
       <option name="closed" value="true" />
@@ -139,7 +148,15 @@
       <option name="project" value="LOCAL" />
       <updated>1768860345223</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Implement environment variable checks and add authentication token management">
+      <option name="closed" value="true" />
+      <created>1768860949654</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1768860949654</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -152,18 +169,6 @@
     <MESSAGE value="Add initial project setup with Express, Apollo Server, and MongoDB integration" />
     <MESSAGE value="Implement environment variable checks and add authentication token management" />
     <option name="LAST_COMMIT_MESSAGE" value="Implement environment variable checks and add authentication token management" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/src/graphql/resolvers.ts</url>
-          <line>67</line>
-          <properties lambdaOrdinal="-1" />
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
   <component name="github-copilot-workspace">
     <instructionFileLocations>

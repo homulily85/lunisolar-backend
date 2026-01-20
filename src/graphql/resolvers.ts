@@ -6,11 +6,12 @@ import {
     REFRESH_TOKEN_LIFETIME,
     REFRESH_TOKEN_SECRET,
 } from "../utils/config";
-import { parseDurationToSeconds } from "../utils/parseDurationToSeconds";
+import { parseDurationToMiliseconds } from "../utils/parseDurationToMiliseconds";
 import jwt from "jsonwebtoken";
 import { createHash } from "crypto";
 import getAccessToken from "../service/getAccessToken";
 import InvalidCredentialError from "../utils/InvalidCredentialError";
+import deleteRefreshToken from "../service/deleteRefreshToken";
 
 const resolvers = {
     Query: {},
@@ -23,7 +24,7 @@ const resolvers = {
             try {
                 const { refreshToken, contextString } =
                     await getRefreshToken(oauthToken);
-                const cookieLifeTime = parseDurationToSeconds(
+                const cookieLifeTime = parseDurationToMiliseconds(
                     REFRESH_TOKEN_LIFETIME,
                 );
 
@@ -95,7 +96,7 @@ const resolvers = {
 
                     const { accessToken, contextString } =
                         await getAccessToken(refreshToken);
-                    const cookieLifeTime = parseDurationToSeconds(
+                    const cookieLifeTime = parseDurationToMiliseconds(
                         ACCESS_TOKEN_LIFETIME,
                     );
 
@@ -114,7 +115,7 @@ const resolvers = {
                 if (e instanceof InvalidCredentialError) {
                     throw new GraphQLError("invalid credentials", {
                         extensions: {
-                            code: "BAD_USER_INPUT",
+                            code: "UNAUTHENTICATED",
                         },
                     });
                 } else {
@@ -126,6 +127,60 @@ const resolvers = {
                     });
                 }
             }
+        },
+        logout: async (
+            _root: unknown,
+            _args: unknown,
+            context: { req: Request; res: Response },
+        ) => {
+            const refreshToken = context.req.cookies["refreshToken"] as string;
+
+            if (!refreshToken) {
+                return "success";
+            }
+
+            const payload = jwt.verify(refreshToken, REFRESH_TOKEN_SECRET);
+
+            if (
+                typeof payload === "object" &&
+                payload !== null &&
+                "contextString" in payload
+            ) {
+                const cookieContextString = context.req.cookies[
+                    "refreshContext"
+                ] as string;
+
+                if (
+                    !cookieContextString ||
+                    payload.contextString !==
+                        createHash("sha256")
+                            .update(cookieContextString)
+                            .digest("hex")
+                ) {
+                    return "success";
+                }
+
+                context.res.clearCookie("refreshContext", {
+                    httpOnly: true,
+                    sameSite: "strict",
+                    secure: true,
+                });
+
+                context.res.clearCookie("refreshToken", {
+                    httpOnly: true,
+                    sameSite: "strict",
+                    secure: true,
+                });
+
+                context.res.clearCookie("accessContext", {
+                    httpOnly: true,
+                    sameSite: "strict",
+                    secure: true,
+                });
+
+                await deleteRefreshToken(refreshToken);
+            }
+            return "success";
         },
     },
 };
