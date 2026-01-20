@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
-import { RefreshTokenDocument } from "../type";
+import { RefreshToken } from "../type";
 
-const schema = new mongoose.Schema<RefreshTokenDocument>({
+const schema = new mongoose.Schema<RefreshToken>({
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
@@ -22,4 +22,4 @@ const schema = new mongoose.Schema<RefreshTokenDocument>({
     },
 });
 
-export default mongoose.model<RefreshTokenDocument>("RefreshToken", schema);
+export default mongoose.model<RefreshToken>("RefreshToken", schema);

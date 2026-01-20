@@ -3,15 +3,16 @@ import { createHash } from "crypto";
 import createContextString from "../utils/createContextString";
 import jwt from "jsonwebtoken";
 import { ACCESS_TOKEN_LIFETIME, REFRESH_TOKEN_SECRET } from "../utils/config";
-import { UserDocument } from "../type";
+import { User } from "../type";
 import InvalidCredentialError from "../utils/InvalidCredentialError";
+import hash from "../utils/hash";
 
 const getAccessToken = async (refreshToken: string) => {
-    const tokenHash = createHash("sha256").update(refreshToken).digest("hex");
+    const tokenHash = hash(refreshToken);
 
     const refreshTokenInfo = await RefreshToken.findOne({
         tokenHash,
-    }).populate<{ user: UserDocument }>("user");
+    }).populate<{ user: User }>("user");
     if (
         !refreshTokenInfo ||
         refreshTokenInfo.revoked ||

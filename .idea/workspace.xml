@@ -4,14 +4,25 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="705039f1-b90b-437f-9143-8d8ef2f66af2" name="Changes" comment="Implement environment variable checks and add authentication token management">
-      <change afterPath="$PROJECT_DIR$/src/service/deleteRefreshToken.ts" afterDir="false" />
+    <list default="true" id="705039f1-b90b-437f-9143-8d8ef2f66af2" name="Changes" comment="Add logout functionality and update token management logic">
+      <change afterPath="$PROJECT_DIR$/src/graphql/mutations/addEvent.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/graphql/mutations/auth.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/graphql/mutations/logout.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/graphql/mutations/refreshAccessToken.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/models/event.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/service/getAccessTokenPayload.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/utils/hash.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/utils/isValidContextString.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/graphql/resolvers.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphql/resolvers.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/graphql/schema.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphql/schema.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/refreshToken.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/refreshToken.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/user.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/user.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/service/deleteRefreshToken.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/service/deleteRefreshToken.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/service/getAccessToken.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/service/getAccessToken.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/service/getRefreshToken.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/service/getRefreshToken.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils/db.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/db.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils/parseDurationToSeconds.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/parseDurationToMiliseconds.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/type.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/type.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -130,7 +141,7 @@
       <workItem from="1768584920540" duration="20148000" />
       <workItem from="1768772770581" duration="2041000" />
       <workItem from="1768840687840" duration="19117000" />
-      <workItem from="1768904420092" duration="6970000" />
+      <workItem from="1768904420092" duration="13099000" />
     </task>
     <task id="LOCAL-00001" summary="Add initial project setup with Express, Apollo Server, and MongoDB integration">
       <option name="closed" value="true" />
@@ -156,7 +167,15 @@
       <option name="project" value="LOCAL" />
       <updated>1768860949654</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Add logout functionality and update token management logic">
+      <option name="closed" value="true" />
+      <created>1768936654328</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1768936654328</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -168,7 +187,8 @@
     </ignored-roots>
     <MESSAGE value="Add initial project setup with Express, Apollo Server, and MongoDB integration" />
     <MESSAGE value="Implement environment variable checks and add authentication token management" />
-    <option name="LAST_COMMIT_MESSAGE" value="Implement environment variable checks and add authentication token management" />
+    <MESSAGE value="Add logout functionality and update token management logic" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add logout functionality and update token management logic" />
   </component>
   <component name="github-copilot-workspace">
     <instructionFileLocations>

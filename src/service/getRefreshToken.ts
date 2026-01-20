@@ -6,11 +6,11 @@ import {
 import { OAuth2Client } from "google-auth-library";
 import jwt from "jsonwebtoken";
 import createContextString from "../utils/createContextString";
-import { createHash } from "crypto";
 import User from "../models/user";
 import RefreshToken from "../models/refreshToken";
 import { parseDurationToMiliseconds } from "../utils/parseDurationToMiliseconds";
 import InvalidCredentialError from "../utils/InvalidCredentialError";
+import hash from "../utils/hash";
 
 const getRefreshToken = async (token: string) => {
     const client = new OAuth2Client(OAUTH_CLIENT_ID);
@@ -39,8 +39,10 @@ const getRefreshToken = async (token: string) => {
     }
 
     const userForToken = {
-        ...user,
-        contextString: createHash("sha256").update(contextString).digest("hex"),
+        userId: payload.sub,
+        name: payload.name,
+        profilePictureLink: payload.picture,
+        contextString: hash(contextString),
     };
 
     const refreshToken = jwt.sign(
@@ -53,7 +55,7 @@ const getRefreshToken = async (token: string) => {
 
     await new RefreshToken({
         user: user._id,
-        tokenHash: createHash("sha256").update(refreshToken).digest("hex"),
+        tokenHash: hash(refreshToken),
         revoked: false,
         expiresAt: new Date(
             Date.now() +

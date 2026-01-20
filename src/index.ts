@@ -10,6 +10,7 @@ import resolvers from "./graphql/resolvers";
 import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
 import { expressMiddleware } from "@as-integrations/express5";
 import cookieParser from "cookie-parser";
+import getAccessTokenPayload from "./service/getAccessTokenPayload";
 
 const main = async () => {
     await connectToDatabase(MONGO_URI);
@@ -39,10 +40,21 @@ const main = async () => {
         "/api/graphql",
         expressMiddleware(graphQLServer, {
             // eslint-disable-next-line @typescript-eslint/require-await
-            context: async ({ req, res }) => ({
-                req,
-                res,
-            }),
+            context: async ({ req, res }) => {
+                const authorization = req.headers.authorization;
+                if (!authorization || !authorization.startsWith("Bearer ")) {
+                    return { req, res };
+                }
+
+                const accessToken = authorization.substring(7);
+
+                const contextString = req.cookies["accessContext"] as string;
+                const tokenPayload = getAccessTokenPayload(
+                    accessToken,
+                    contextString,
+                );
+                return { req, res, tokenPayload };
+            },
         }),
     );
 

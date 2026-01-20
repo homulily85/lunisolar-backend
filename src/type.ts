@@ -1,5 +1,6 @@
 import z from "zod";
-import { HydratedDocument, Types } from "mongoose";
+import { Types } from "mongoose";
+import { JwtPayload } from "jsonwebtoken";
 
 export const EventSchema = z.object({
     title: z.string(),
@@ -12,25 +13,39 @@ export const EventSchema = z.object({
     reminder: z.array(z.string()).optional(),
 });
 
-export type Event = z.infer<typeof EventSchema>;
+export type EventInput = z.infer<typeof EventSchema>;
 
-export const IUserSchema = z.object({
+export interface EventDb {
+    title: string;
+    place?: string;
+    isAllDay: boolean;
+    startDateTime: Date;
+    endDateTime: Date;
+    rruleString: string;
+    description: string;
+    reminder?: string[];
+}
+
+export const UserSchema = z.object({
     userId: z.string(),
     name: z.string(),
     profilePictureLink: z.string(),
 });
 
-type IUser = z.infer<typeof IUserSchema>;
+export type User = z.infer<typeof UserSchema>;
 
-export type UserDocument = HydratedDocument<IUser>;
-
-export const IRefreshTokenSchema = z.object({
+export const RefreshTokenSchema = z.object({
     user: z.instanceof(Types.ObjectId),
     tokenHash: z.string(),
     revoked: z.boolean(),
     expiresAt: z.number(),
 });
 
-type IRefreshToken = z.infer<typeof IRefreshTokenSchema>;
+export type RefreshToken = z.infer<typeof RefreshTokenSchema>;
 
-export type RefreshTokenDocument = HydratedDocument<IRefreshToken>;
+export interface TokenPayload extends JwtPayload {
+    userId: string;
+    name: string;
+    profilePictureLink: string;
+    contextString: string;
+}
