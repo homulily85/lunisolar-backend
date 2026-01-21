@@ -1,8 +1,9 @@
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { REFRESH_TOKEN_SECRET } from "../../utils/config";
-import isValidContextString from "../../utils/isValidContextString";
+import isValidContextString from "../../utils/authentication/isValidContextString";
 import { deleteRefreshToken } from "../../service/authenticationService";
+import { TokenPayload } from "../../type";
 
 const logout = async (
     _root: unknown,
@@ -15,47 +16,39 @@ const logout = async (
         return "success";
     }
 
-    const payload = jwt.verify(refreshToken, REFRESH_TOKEN_SECRET);
+    const payload = jwt.verify(
+        refreshToken,
+        REFRESH_TOKEN_SECRET,
+    ) as TokenPayload;
+
+    const cookieContextString = context.req.cookies["refreshContext"] as string;
 
     if (
-        typeof payload === "object" &&
-        payload !== null &&
-        "contextString" in payload
+        !cookieContextString ||
+        !isValidContextString(cookieContextString, payload.hashedContextString)
     ) {
-        const cookieContextString = context.req.cookies[
-            "refreshContext"
-        ] as string;
-
-        if (
-            !cookieContextString ||
-            !isValidContextString(
-                cookieContextString,
-                payload.contextString as string,
-            )
-        ) {
-            return "success";
-        }
-
-        context.res.clearCookie("refreshContext", {
-            httpOnly: true,
-            sameSite: "strict",
-            secure: true,
-        });
-
-        context.res.clearCookie("refreshToken", {
-            httpOnly: true,
-            sameSite: "strict",
-            secure: true,
-        });
-
-        context.res.clearCookie("accessContext", {
-            httpOnly: true,
-            sameSite: "strict",
-            secure: true,
-        });
-
-        await deleteRefreshToken(refreshToken);
+        return "success";
     }
+
+    context.res.clearCookie("refreshContext", {
+        httpOnly: true,
+        sameSite: "strict",
+        secure: true,
+    });
+
+    context.res.clearCookie("refreshToken", {
+        httpOnly: true,
+        sameSite: "strict",
+        secure: true,
+    });
+
+    context.res.clearCookie("accessContext", {
+        httpOnly: true,
+        sameSite: "strict",
+        secure: true,
+    });
+
+    await deleteRefreshToken(refreshToken);
 
     return "success";
 };

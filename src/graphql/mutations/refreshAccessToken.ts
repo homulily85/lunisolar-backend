@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import InvalidCredentialError from "../../utils/InvalidCredentialError";
+import InvalidCredentialError from "../../utils/authentication/InvalidCredentialError";
 import jwt from "jsonwebtoken";
 import {
     ACCESS_TOKEN_LIFETIME,
@@ -7,8 +7,9 @@ import {
 } from "../../utils/config";
 import { parseDurationToMiliseconds } from "../../utils/parseDurationToMiliseconds";
 import { GraphQLError } from "graphql/error";
-import isValidContextString from "../../utils/isValidContextString";
+import isValidContextString from "../../utils/authentication/isValidContextString";
 import { getAccessToken } from "../../service/authenticationService";
+import { TokenPayload } from "../../type";
 
 const refreshAccessToken = async (
     _root: unknown,
@@ -21,44 +22,39 @@ const refreshAccessToken = async (
             throw new InvalidCredentialError();
         }
 
-        const payload = jwt.verify(refreshToken, REFRESH_TOKEN_SECRET);
+        const payload = jwt.verify(
+            refreshToken,
+            REFRESH_TOKEN_SECRET,
+        ) as TokenPayload;
+
+        const cookieContextString = context.req.cookies[
+            "refreshContext"
+        ] as string;
 
         if (
-            typeof payload === "object" &&
-            payload !== null &&
-            "contextString" in payload
+            !cookieContextString ||
+            !isValidContextString(
+                cookieContextString,
+                payload.hashedContextString,
+            )
         ) {
-            const cookieContextString = context.req.cookies[
-                "refreshContext"
-            ] as string;
-
-            if (
-                !cookieContextString ||
-                !isValidContextString(
-                    cookieContextString,
-                    payload.contextString as string,
-                )
-            ) {
-                throw new InvalidCredentialError();
-            }
-
-            const { accessToken, contextString } =
-                await getAccessToken(refreshToken);
-            const cookieLifeTime = parseDurationToMiliseconds(
-                ACCESS_TOKEN_LIFETIME,
-            );
-
-            context.res.cookie("accessContext", contextString, {
-                httpOnly: true,
-                maxAge: cookieLifeTime,
-                sameSite: "strict",
-                secure: true,
-            });
-
-            return accessToken;
-        } else {
             throw new InvalidCredentialError();
         }
+
+        const { accessToken, contextString } =
+            await getAccessToken(refreshToken);
+        const cookieLifeTime = parseDurationToMiliseconds(
+            ACCESS_TOKEN_LIFETIME,
+        );
+
+        context.res.cookie("accessContext", contextString, {
+            httpOnly: true,
+            maxAge: cookieLifeTime,
+            sameSite: "strict",
+            secure: true,
+        });
+
+        return accessToken;
     } catch (e) {
         if (e instanceof InvalidCredentialError) {
             throw new GraphQLError("invalid credentials", {

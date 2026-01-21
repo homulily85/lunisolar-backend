@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
-import { ACCESS_TOKEN_SECRET } from "./config";
-import { TokenPayload } from "../type";
+import { ACCESS_TOKEN_SECRET } from "../config";
+import { TokenPayload } from "../../type";
 import isValidContextString from "./isValidContextString";
 
 const getAccessTokenPayload = (
@@ -14,7 +14,9 @@ const getAccessTokenPayload = (
         accessToken,
         ACCESS_TOKEN_SECRET,
     ) as TokenPayload;
-    if (!isValidContextString(contextString, decodedToken?.contextString)) {
+    if (
+        !isValidContextString(contextString, decodedToken?.hashedContextString)
+    ) {
         return null;
     }
     return decodedToken;

@@ -1,11 +1,12 @@
 import hash from "../utils/hash";
 import RefreshToken from "../models/refreshToken";
 import { type IUser } from "../type";
-import InvalidCredentialError from "../utils/InvalidCredentialError";
-import createContextString from "../utils/createContextString";
+import InvalidCredentialError from "../utils/authentication/InvalidCredentialError";
+import createContextString from "../utils/authentication/createContextString";
 import jwt from "jsonwebtoken";
 import {
     ACCESS_TOKEN_LIFETIME,
+    ACCESS_TOKEN_SECRET,
     OAUTH_CLIENT_ID,
     REFRESH_TOKEN_LIFETIME,
     REFRESH_TOKEN_SECRET,
@@ -13,6 +14,7 @@ import {
 import { OAuth2Client } from "google-auth-library";
 import { parseDurationToMiliseconds } from "../utils/parseDurationToMiliseconds";
 import User from "../models/user";
+import createToken from "../utils/authentication/createToken";
 
 export const getAccessToken = async (refreshToken: string) => {
     const tokenHash = hash(refreshToken);
@@ -29,19 +31,16 @@ export const getAccessToken = async (refreshToken: string) => {
     }
 
     const contextString = createContextString();
-    const userForToken = {
-        userId: refreshTokenInfo.user.userId,
-        name: refreshTokenInfo.user.name,
-        profilePictureLink: refreshTokenInfo.user.profilePictureLink,
-        contextString: hash(contextString),
-    };
 
-    const accessToken = jwt.sign(
-        userForToken,
-        REFRESH_TOKEN_SECRET as jwt.Secret,
+    const accessToken = createToken(
         {
-            expiresIn: ACCESS_TOKEN_LIFETIME as jwt.SignOptions["expiresIn"],
+            id: refreshTokenInfo.user._id.toString(),
+            name: refreshTokenInfo.user.name,
+            profilePictureLink: refreshTokenInfo.user.profilePictureLink,
         },
+        contextString,
+        ACCESS_TOKEN_SECRET,
+        ACCESS_TOKEN_LIFETIME as jwt.SignOptions["expiresIn"],
     );
 
     return {
@@ -65,10 +64,10 @@ export const getRefreshToken = async (token: string) => {
 
     const contextString = createContextString();
 
-    let user = await User.findOne({ userId: payload.sub });
+    let user = await User.findOne({ googleId: payload.sub });
     if (!user) {
         user = new User({
-            userId: payload.sub,
+            googleId: payload.sub,
             name: payload.name,
             profilePictureLink: payload.picture,
         });
@@ -76,19 +75,15 @@ export const getRefreshToken = async (token: string) => {
         await user.save();
     }
 
-    const userForToken = {
-        userId: payload.sub,
-        name: payload.name,
-        profilePictureLink: payload.picture,
-        contextString: hash(contextString),
-    };
-
-    const refreshToken = jwt.sign(
-        userForToken,
-        REFRESH_TOKEN_SECRET as jwt.Secret,
+    const refreshToken = createToken(
         {
-            expiresIn: REFRESH_TOKEN_LIFETIME as jwt.SignOptions["expiresIn"],
+            id: user._id.toString(),
+            name: user.name,
+            profilePictureLink: user.profilePictureLink,
         },
+        contextString,
+        REFRESH_TOKEN_SECRET,
+        REFRESH_TOKEN_LIFETIME as jwt.SignOptions["expiresIn"],
     );
 
     await new RefreshToken({

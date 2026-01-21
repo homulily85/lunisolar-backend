@@ -1,4 +1,4 @@
-import hash from "./hash";
+import hash from "../hash";
 
 const isValidContextString = (
     contextString: string,

@@ -11,11 +11,13 @@ export const EventSchema = z.object({
     rruleString: z.string(),
     description: z.string(),
     reminder: z.array(z.string()).optional(),
+    user: z.string(),
 });
 
 export type EventInput = z.infer<typeof EventSchema>;
 
 export interface EventDb {
+    user: Types.ObjectId;
     title: string;
     place?: string;
     isAllDay: boolean;
@@ -26,26 +28,23 @@ export interface EventDb {
     reminder?: string[];
 }
 
-export const UserSchema = z.object({
-    userId: z.string(),
-    name: z.string(),
-    profilePictureLink: z.string(),
-});
-
-export type IUser = z.infer<typeof UserSchema>;
-
-export const RefreshTokenSchema = z.object({
-    user: z.instanceof(Types.ObjectId),
-    tokenHash: z.string(),
-    revoked: z.boolean(),
-    expiresAt: z.number(),
-});
-
-export type IRefreshToken = z.infer<typeof RefreshTokenSchema>;
-
-export interface TokenPayload extends JwtPayload {
-    userId: string;
+export type IUser = {
+    googleId: string;
     name: string;
     profilePictureLink: string;
-    contextString: string;
+    _id: Types.ObjectId;
+};
+
+export type IRefreshToken = {
+    user: Types.ObjectId;
+    tokenHash: string;
+    revoked: boolean;
+    expiresAt: number;
+};
+
+export interface TokenPayload extends JwtPayload {
+    id: string;
+    name: string;
+    profilePictureLink: string;
+    hashedContextString: string;
 }

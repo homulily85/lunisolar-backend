@@ -1,6 +1,6 @@
 import { parseDurationToMiliseconds } from "../../utils/parseDurationToMiliseconds";
 import { REFRESH_TOKEN_LIFETIME } from "../../utils/config";
-import InvalidCredentialError from "../../utils/InvalidCredentialError";
+import InvalidCredentialError from "../../utils/authentication/InvalidCredentialError";
 import { GraphQLError } from "graphql/error";
 import { Request, Response } from "express";
 import { getRefreshToken } from "../../service/authenticationService";
