@@ -1,14 +1,13 @@
-import { Request } from "express";
-import { EventSchema, TokenPayload } from "../../type";
+import { type EventInput, TokenPayload } from "../../type";
 import { GraphQLError } from "graphql/error";
-import Event from "../../models/event";
+import { addNewEvent } from "../../services/eventService";
 
 const addEvent = async (
     _root: unknown,
-    _args: unknown,
-    context: { req: Request; tokenPayload: TokenPayload },
+    { newEvent }: { newEvent: EventInput },
+    { tokenPayload }: { tokenPayload: TokenPayload },
 ) => {
-    if (!context.tokenPayload) {
+    if (!tokenPayload) {
         throw new GraphQLError("invalid credentials", {
             extensions: {
                 code: "UNAUTHENTICATED",
@@ -16,22 +15,6 @@ const addEvent = async (
         });
     }
 
-    const inputEvent = EventSchema.safeParse(context.req);
-    if (!inputEvent.success) {
-        throw new GraphQLError(`Invalid input ${inputEvent.error}`, {
-            extensions: {
-                code: "BAD_USER_INPUT",
-            },
-        });
-    }
-
-    const createdEvent = new Event({
-        ...inputEvent.data,
-        startDateTime: new Date(inputEvent.data.startDateTime),
-        endDateTime: new Date(inputEvent.data.endDateTime),
-    });
-
-    await createdEvent.save();
-    return createdEvent;
+    return await addNewEvent(newEvent, tokenPayload.id);
 };
 export default addEvent;

@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { REFRESH_TOKEN_SECRET } from "../../utils/config";
 import isValidContextString from "../../utils/authentication/isValidContextString";
-import { deleteRefreshToken } from "../../service/authenticationService";
+import { deleteRefreshToken } from "../../services/authenticationService";
 import { TokenPayload } from "../../type";
 
 const logout = async (

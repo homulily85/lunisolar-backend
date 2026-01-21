@@ -8,7 +8,7 @@ import {
 import { parseDurationToMiliseconds } from "../../utils/parseDurationToMiliseconds";
 import { GraphQLError } from "graphql/error";
 import isValidContextString from "../../utils/authentication/isValidContextString";
-import { getAccessToken } from "../../service/authenticationService";
+import { getAccessToken } from "../../services/authenticationService";
 import { TokenPayload } from "../../type";
 
 const refreshAccessToken = async (

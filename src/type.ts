@@ -11,7 +11,6 @@ export const EventSchema = z.object({
     rruleString: z.string(),
     description: z.string(),
     reminder: z.array(z.string()).optional(),
-    user: z.string(),
 });
 
 export type EventInput = z.infer<typeof EventSchema>;
