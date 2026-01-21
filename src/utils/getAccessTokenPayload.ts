@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
-import { ACCESS_TOKEN_SECRET } from "../utils/config";
+import { ACCESS_TOKEN_SECRET } from "./config";
 import { TokenPayload } from "../type";
-import isValidContextString from "../utils/isValidContextString";
+import isValidContextString from "./isValidContextString";
 
 const getAccessTokenPayload = (
     accessToken: string | undefined,

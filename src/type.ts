@@ -32,7 +32,7 @@ export const UserSchema = z.object({
     profilePictureLink: z.string(),
 });
 
-export type User = z.infer<typeof UserSchema>;
+export type IUser = z.infer<typeof UserSchema>;
 
 export const RefreshTokenSchema = z.object({
     user: z.instanceof(Types.ObjectId),
@@ -41,7 +41,7 @@ export const RefreshTokenSchema = z.object({
     expiresAt: z.number(),
 });
 
-export type RefreshToken = z.infer<typeof RefreshTokenSchema>;
+export type IRefreshToken = z.infer<typeof RefreshTokenSchema>;
 
 export interface TokenPayload extends JwtPayload {
     userId: string;

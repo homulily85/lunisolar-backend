@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { REFRESH_TOKEN_SECRET } from "../../utils/config";
-import deleteRefreshToken from "../../service/deleteRefreshToken";
 import isValidContextString from "../../utils/isValidContextString";
+import { deleteRefreshToken } from "../../service/authenticationService";
 
 const logout = async (
     _root: unknown,

@@ -10,7 +10,7 @@ import resolvers from "./graphql/resolvers";
 import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
 import { expressMiddleware } from "@as-integrations/express5";
 import cookieParser from "cookie-parser";
-import getAccessTokenPayload from "./service/getAccessTokenPayload";
+import getAccessTokenPayload from "./utils/getAccessTokenPayload";
 
 const main = async () => {
     await connectToDatabase(MONGO_URI);

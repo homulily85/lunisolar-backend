@@ -5,10 +5,10 @@ import {
     ACCESS_TOKEN_LIFETIME,
     REFRESH_TOKEN_SECRET,
 } from "../../utils/config";
-import getAccessToken from "../../service/getAccessToken";
 import { parseDurationToMiliseconds } from "../../utils/parseDurationToMiliseconds";
 import { GraphQLError } from "graphql/error";
 import isValidContextString from "../../utils/isValidContextString";
+import { getAccessToken } from "../../service/authenticationService";
 
 const refreshAccessToken = async (
     _root: unknown,

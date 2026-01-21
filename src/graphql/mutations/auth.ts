@@ -1,9 +1,9 @@
-import getRefreshToken from "../../service/getRefreshToken";
 import { parseDurationToMiliseconds } from "../../utils/parseDurationToMiliseconds";
 import { REFRESH_TOKEN_LIFETIME } from "../../utils/config";
 import InvalidCredentialError from "../../utils/InvalidCredentialError";
 import { GraphQLError } from "graphql/error";
 import { Request, Response } from "express";
+import { getRefreshToken } from "../../service/authenticationService";
 
 const auth = async (
     _root: unknown,

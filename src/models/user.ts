@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
-import { User } from "../type";
+import { IUser } from "../type";
 
-const schema = new mongoose.Schema<User>({
+const schema = new mongoose.Schema<IUser>({
     userId: {
         type: String,
         unique: true,
@@ -16,4 +16,4 @@ const schema = new mongoose.Schema<User>({
     },
 });
 
-export default mongoose.model<User>("User", schema);
+export default mongoose.model<IUser>("User", schema);
