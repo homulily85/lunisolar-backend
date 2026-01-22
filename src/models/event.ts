@@ -7,6 +7,7 @@ const schema = new mongoose.Schema<EventDb>(
             type: mongoose.Schema.Types.ObjectId,
             ref: "User",
             required: true,
+            index: true,
         },
         title: {
             type: String,

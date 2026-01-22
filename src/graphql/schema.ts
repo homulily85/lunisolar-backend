@@ -28,7 +28,7 @@ const typeDefs = /*GraphQL*/ `
         addEvent(newEvent:EventInput!): Event
     },
     type Query{
-        getEvents(token: String!): Event
+        getEvents(rangeStart:String!,rangeEnd:String!): [Event]
     }
 `;
 

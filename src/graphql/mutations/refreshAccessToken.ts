@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import InvalidCredentialError from "../../utils/authentication/InvalidCredentialError";
-import jwt from "jsonwebtoken";
+import jwt, { JsonWebTokenError, TokenExpiredError } from "jsonwebtoken";
 import {
     ACCESS_TOKEN_LIFETIME,
     REFRESH_TOKEN_SECRET,
@@ -14,7 +14,7 @@ import { TokenPayload } from "../../type";
 const refreshAccessToken = async (
     _root: unknown,
     _args: unknown,
-    context: { req: Request; res: Response },
+    context: { req: Request; res: Response; accessTokenPayload?: TokenPayload },
 ) => {
     try {
         const refreshToken = context.req.cookies["refreshToken"] as string;
@@ -56,7 +56,11 @@ const refreshAccessToken = async (
 
         return accessToken;
     } catch (e) {
-        if (e instanceof InvalidCredentialError) {
+        if (
+            e instanceof InvalidCredentialError ||
+            e instanceof JsonWebTokenError ||
+            e instanceof TokenExpiredError
+        ) {
             throw new GraphQLError("invalid credentials", {
                 extensions: {
                     code: "UNAUTHENTICATED",

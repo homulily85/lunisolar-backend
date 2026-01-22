@@ -16,41 +16,49 @@ const logout = async (
         return "success";
     }
 
-    const payload = jwt.verify(
-        refreshToken,
-        REFRESH_TOKEN_SECRET,
-    ) as TokenPayload;
+    try {
+        const payload = jwt.verify(
+            refreshToken,
+            REFRESH_TOKEN_SECRET,
+        ) as TokenPayload;
+        const cookieContextString = context.req.cookies[
+            "refreshContext"
+        ] as string;
 
-    const cookieContextString = context.req.cookies["refreshContext"] as string;
+        if (
+            !cookieContextString ||
+            !isValidContextString(
+                cookieContextString,
+                payload.hashedContextString,
+            )
+        ) {
+            return "success";
+        }
 
-    if (
-        !cookieContextString ||
-        !isValidContextString(cookieContextString, payload.hashedContextString)
-    ) {
+        context.res.clearCookie("refreshContext", {
+            httpOnly: true,
+            sameSite: "strict",
+            secure: true,
+        });
+
+        context.res.clearCookie("refreshToken", {
+            httpOnly: true,
+            sameSite: "strict",
+            secure: true,
+        });
+
+        context.res.clearCookie("accessContext", {
+            httpOnly: true,
+            sameSite: "strict",
+            secure: true,
+        });
+
+        await deleteRefreshToken(refreshToken);
+
+        return "success";
+    } catch {
         return "success";
     }
-
-    context.res.clearCookie("refreshContext", {
-        httpOnly: true,
-        sameSite: "strict",
-        secure: true,
-    });
-
-    context.res.clearCookie("refreshToken", {
-        httpOnly: true,
-        sameSite: "strict",
-        secure: true,
-    });
-
-    context.res.clearCookie("accessContext", {
-        httpOnly: true,
-        sameSite: "strict",
-        secure: true,
-    });
-
-    await deleteRefreshToken(refreshToken);
-
-    return "success";
 };
 
 export default logout;
