@@ -1,17 +1,17 @@
 const typeDefs = /*GraphQL*/ `
-    type Event {
+    type EventFromServer {
         id: String
         title: String!
         place: String
         isAllDay: Boolean
-        startDateTime: String!
-        endDateTime: String!
+        startDateTime: Float!
+        endDateTime: Float!
         rruleString: String
         description: String
         reminder: [String]
     }
 
-    input EventInput {
+    input EventFromClient {
         title: String!
         place: String
         isAllDay: Boolean
@@ -25,10 +25,10 @@ const typeDefs = /*GraphQL*/ `
         auth(oauthToken: String!): String,
         refreshAccessToken: String,
         logout:String,
-        addEvent(newEvent:EventInput!): Event
+        addEvent(newEvent:EventFromClient!): EventFromServer
     },
     type Query{
-        getEvents(rangeStart:String!,rangeEnd:String!): [Event]
+        getEvents(rangeStart:String!,rangeEnd:String!): [EventFromServer]
     }
 `;
 
