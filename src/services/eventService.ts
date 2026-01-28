@@ -4,7 +4,7 @@ import { GraphQLError } from "graphql/error";
 import mongoose from "mongoose";
 
 /**
- * Get events in a time range for a specific user.
+ * Get events happening in a time range for a specific user.
  * @param userId ID of the user to get events for.
  * @param rangeStart start of the time range, in ISO 8601 format.
  * @param rangeEnd end of the time range, in ISO 8601 format.
@@ -17,7 +17,8 @@ export const getEventsInTimeRange = async (
 ) => {
     return Event.find({
         user: new mongoose.Types.ObjectId(userId),
-        startDateTime: { $gte: new Date(rangeStart), $lte: new Date(rangeEnd) },
+        startDateTime: { $lte: new Date(rangeEnd) },
+        endDateTime: { $gte: new Date(rangeStart) },
     });
 };
 
@@ -47,8 +48,8 @@ export const addNewEvent = async (event: EventInput, userId: string) => {
     const eventTobeAdded = new Event({
         ...inputEvent.data,
         user: new mongoose.Types.ObjectId(userId),
-        startDateTime: startDateTime,
-        endDateTime: startDateTime,
+        startDateTime,
+        endDateTime,
     });
 
     await eventTobeAdded.save();
