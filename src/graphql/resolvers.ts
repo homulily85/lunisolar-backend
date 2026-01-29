@@ -3,6 +3,7 @@ import logout from "./mutations/logout";
 import refreshAccessToken from "./mutations/refreshAccessToken";
 import addEvent from "./mutations/addEvent";
 import getEvents from "./query/getEvents";
+import deleteEvent from "./mutations/deleteEvent";
 
 const resolvers = {
     Query: { getEvents },
@@ -11,6 +12,7 @@ const resolvers = {
         refreshAccessToken,
         logout,
         addEvent,
+        deleteEvent,
     },
 };
 

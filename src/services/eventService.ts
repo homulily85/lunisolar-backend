@@ -55,3 +55,10 @@ export const addNewEvent = async (event: EventInput, userId: string) => {
     await eventTobeAdded.save();
     return eventTobeAdded;
 };
+
+export const removeEvent = async (eventId: string, userId: string) => {
+    return Event.findOneAndDelete({
+        _id: eventId,
+        user: userId,
+    });
+};

@@ -25,7 +25,8 @@ const typeDefs = /*GraphQL*/ `
         auth(oauthToken: String!): String,
         refreshAccessToken: String,
         logout:String,
-        addEvent(newEvent:EventFromClient!): EventFromServer
+        addEvent(newEvent:EventFromClient!): EventFromServer,
+        deleteEvent(eventId: String!): String
     },
     type Query{
         getEvents(rangeStart:String!,rangeEnd:String!): [EventFromServer]
