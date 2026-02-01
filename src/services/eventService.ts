@@ -2,6 +2,7 @@ import { EventInput, EventSchema } from "../type";
 import Event from "../models/event";
 import { GraphQLError } from "graphql/error";
 import mongoose from "mongoose";
+import { rrulestr } from "rrule";
 
 /**
  * Get events happening in a time range for a specific user.
@@ -15,10 +16,32 @@ export const getEventsInTimeRange = async (
     rangeStart: string,
     rangeEnd: string,
 ) => {
-    return Event.find({
+    const start = new Date(rangeStart);
+    const end = new Date(rangeEnd);
+
+    const events = await Event.find({
         user: new mongoose.Types.ObjectId(userId),
-        startDateTime: { $lte: new Date(rangeEnd) },
-        endDateTime: { $gte: new Date(rangeStart) },
+        $or: [
+            {
+                $or: [{ rruleString: { $exists: false } }, { rruleString: "" }],
+                startDateTime: { $lte: end },
+                endDateTime: { $gte: start },
+            },
+            {
+                rruleString: { $exists: true, $ne: "" },
+                startDateTime: { $lte: end },
+            },
+        ],
+    });
+
+    return events.filter((e) => {
+        if (!e.rruleString) {
+            return true;
+        } else {
+            const rule = rrulestr(e.rruleString, { dtstart: e.startDateTime });
+            const nextOccurrence = rule.after(start, true);
+            return nextOccurrence && nextOccurrence <= end;
+        }
     });
 };
 
