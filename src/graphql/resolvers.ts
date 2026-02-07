@@ -4,6 +4,7 @@ import refreshAccessToken from "./mutations/refreshAccessToken";
 import addEvent from "./mutations/addEvent";
 import getEvents from "./query/getEvents";
 import deleteEvent from "./mutations/deleteEvent";
+import updateEvent from "./mutations/updateEvent";
 
 const resolvers = {
     Query: { getEvents },
@@ -13,6 +14,7 @@ const resolvers = {
         logout,
         addEvent,
         deleteEvent,
+        updateEvent,
     },
 };
 

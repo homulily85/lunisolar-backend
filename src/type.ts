@@ -3,6 +3,7 @@ import { Types } from "mongoose";
 import { JwtPayload } from "jsonwebtoken";
 
 export const EventSchema = z.object({
+    id: z.string().optional(),
     title: z.string(),
     place: z.string().optional(),
     isAllDay: z.boolean(),

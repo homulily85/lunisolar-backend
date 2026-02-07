@@ -85,3 +85,56 @@ export const removeEvent = async (eventId: string, userId: string) => {
         user: userId,
     });
 };
+
+export const updateAnEvent = async (
+    eventToBeUpdated: EventInput,
+    userId: string,
+) => {
+    const inputEvent = EventSchema.safeParse(eventToBeUpdated);
+
+    if (!inputEvent.success) {
+        throw new GraphQLError(`Invalid input ${inputEvent.error}`, {
+            extensions: {
+                code: "BAD_USER_INPUT",
+            },
+        });
+    }
+
+    if (!inputEvent.data.id) {
+        throw new GraphQLError(`No event id included`, {
+            extensions: {
+                code: "BAD_USER_INPUT",
+            },
+        });
+    }
+
+    const startDateTime = new Date(inputEvent.data.startDateTime);
+    const endDateTime = new Date(inputEvent.data.endDateTime);
+
+    if (startDateTime > endDateTime) {
+        throw new GraphQLError(
+            `Start datetime must not be greater than end datetime `,
+            {
+                extensions: {
+                    code: "BAD_USER_INPUT",
+                },
+            },
+        );
+    }
+
+    await Event.updateOne(
+        { _id: eventToBeUpdated.id, user: userId },
+        {
+            ...inputEvent.data,
+            user: new mongoose.Types.ObjectId(userId),
+            startDateTime,
+            endDateTime,
+        },
+    );
+
+    return {
+        ...inputEvent.data,
+        startDateTime,
+        endDateTime,
+    };
+};

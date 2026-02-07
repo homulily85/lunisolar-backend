@@ -12,6 +12,7 @@ const typeDefs = /*GraphQL*/ `
     }
 
     input EventFromClient {
+        id: String
         title: String!
         place: String
         isAllDay: Boolean
@@ -26,7 +27,8 @@ const typeDefs = /*GraphQL*/ `
         refreshAccessToken: String,
         logout:String,
         addEvent(newEvent:EventFromClient!): EventFromServer,
-        deleteEvent(eventId: String!): String
+        deleteEvent(eventId: String!): String,
+        updateEvent(eventToBeUpdated:EventFromClient!): EventFromServer
     },
     type Query{
         getEvents(rangeStart:String!,rangeEnd:String!): [EventFromServer]
