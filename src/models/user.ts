@@ -15,6 +15,10 @@ const schema = new mongoose.Schema<IUser>(
         profilePictureLink: {
             type: String,
         },
+        fcmTokens: {
+            type: [String],
+            default: [],
+        },
     },
     {
         toJSON: {
@@ -24,6 +28,7 @@ const schema = new mongoose.Schema<IUser>(
                 delete ret["googleId"];
                 // Use internal id for better event and token management.
                 ret["id"] = doc._id.toString();
+                delete ret["fcmTokens"];
                 return ret;
             },
         },

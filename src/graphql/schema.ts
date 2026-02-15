@@ -28,7 +28,9 @@ const typeDefs = /*GraphQL*/ `
         logout:String,
         addEvent(newEvent:EventFromClient!): EventFromServer,
         deleteEvent(eventId: String!): String,
-        updateEvent(eventToBeUpdated:EventFromClient!): EventFromServer
+        updateEvent(eventToBeUpdated:EventFromClient!): EventFromServer,
+        addFcmToken(token: String!): String,
+        removeFcmToken(token: String!): String
     },
     type Query{
         getEvents(rangeStart:String!,rangeEnd:String!): [EventFromServer]

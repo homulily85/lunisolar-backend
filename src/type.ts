@@ -33,6 +33,7 @@ export type IUser = {
     name: string;
     profilePictureLink: string;
     _id: Types.ObjectId;
+    fcmTokens: string[];
 };
 
 export type IRefreshToken = {

@@ -5,6 +5,8 @@ import addEvent from "./mutations/addEvent";
 import getEvents from "./query/getEvents";
 import deleteEvent from "./mutations/deleteEvent";
 import updateEvent from "./mutations/updateEvent";
+import addFcmToken from "./mutations/addFCMToken";
+import removeFcmToken from "./mutations/removeFCMToken";
 
 const resolvers = {
     Query: { getEvents },
@@ -15,6 +17,8 @@ const resolvers = {
         addEvent,
         deleteEvent,
         updateEvent,
+        addFcmToken,
+        removeFcmToken,
     },
 };
 
