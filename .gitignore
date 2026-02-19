@@ -11,3 +11,7 @@ yarn-error.log*
 .vscode/*
 .env
 package-lock.json
+.public
+dist
+coverage
+build

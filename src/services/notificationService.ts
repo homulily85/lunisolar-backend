@@ -135,8 +135,4 @@ export const cancelNotificationForEvent = async (eventId: string) => {
     });
 
     await Promise.all(oneTimeJobs.map((job) => job.remove()));
-
-    console.log(
-        `Cancelled ${eventSchedulers.length} schedulers and ${oneTimeJobs.length} one-time jobs for event ${eventId}`,
-    );
 };

@@ -11,6 +11,7 @@ import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHt
 import { expressMiddleware } from "@as-integrations/express5";
 import cookieParser from "cookie-parser";
 import getAccessTokenPayload from "./utils/authentication/getAccessTokenPayload";
+import * as path from "node:path";
 
 const main = async () => {
     await connectToDatabase(MONGO_URI);
@@ -19,6 +20,8 @@ const main = async () => {
 
     app.use(cookieParser());
     app.use(express.json());
+
+    app.use(express.static(path.join(__dirname, "public")));
 
     app.use(
         morgan(":method :url :status :res[content-length] - :response-time ms"),

@@ -35,9 +35,7 @@ const settings = {
         const next_occurrence = rrule.after(currentDate, false);
 
         if (next_occurrence) {
-            console.log("Next Original:", next_occurrence.toISOString());
             next_occurrence.setHours(next_occurrence.getHours() - 7);
-            console.log("Next Adjusted:", next_occurrence.toISOString());
             return next_occurrence.getTime();
         }
 
