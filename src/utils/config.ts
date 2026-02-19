@@ -1,4 +1,5 @@
 import dotenv from "dotenv";
+import { ServiceAccount } from "firebase-admin";
 
 dotenv.config();
 
@@ -38,6 +39,19 @@ if (!process.env.REFRESH_TOKEN_LIFETIME) {
     );
 }
 
+if (!process.env.REDIS_HOST) {
+    throw new Error("REDIS_HOST is not defined in environment variables.");
+}
+
+if (!process.env.REDIS_PORT) {
+    throw new Error("REDIS_PORT is not defined in environment variables.");
+}
+
+if (!process.env.FIREBASE_SERVICE_ACCOUNT_KEY) {
+    throw new Error(
+        "FIREBASE_SERVICE_ACCOUNT_KEY is not defined in environment variables.",
+    );
+}
 export const PORT = process.env.PORT;
 export const MONGO_URI = process.env.MONGO_URI;
 export const OAUTH_CLIENT_ID = process.env.OAUTH_CLIENT_ID;
@@ -45,3 +59,8 @@ export const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
 export const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
 export const ACCESS_TOKEN_LIFETIME = process.env.ACCESS_TOKEN_LIFETIME;
 export const REFRESH_TOKEN_LIFETIME = process.env.REFRESH_TOKEN_LIFETIME;
+export const REDIS_HOST = process.env.REDIS_HOST;
+export const REDIS_PORT = process.env.REDIS_PORT;
+export const FIREBASE_SERVICE_ACCOUNT_KEY = JSON.parse(
+    process.env.FIREBASE_SERVICE_ACCOUNT_KEY,
+) as ServiceAccount;

@@ -76,6 +76,7 @@ export const addNewEvent = async (event: EventInput, userId: string) => {
     });
 
     await eventTobeAdded.save();
+
     return eventTobeAdded;
 };
 
@@ -122,19 +123,34 @@ export const updateAnEvent = async (
         );
     }
 
-    await Event.updateOne(
-        { _id: eventToBeUpdated.id, user: userId },
+    // await Event.updateOne(
+    //     { _id: eventToBeUpdated.id, user: userId },
+    //     {
+    //         ...inputEvent.data,
+    //         user: new mongoose.Types.ObjectId(userId),
+    //         startDateTime,
+    //         endDateTime,
+    //     },
+    // );
+
+    const eventTobeUpdated = await Event.findOneAndUpdate(
+        { _id: inputEvent.data.id, user: userId },
         {
             ...inputEvent.data,
             user: new mongoose.Types.ObjectId(userId),
             startDateTime,
             endDateTime,
         },
+        { new: true },
     );
 
-    return {
-        ...inputEvent.data,
-        startDateTime,
-        endDateTime,
-    };
+    if (!eventTobeUpdated) {
+        throw new GraphQLError(`Event not found`, {
+            extensions: {
+                code: "NOT_FOUND",
+            },
+        });
+    }
+
+    return eventTobeUpdated;
 };

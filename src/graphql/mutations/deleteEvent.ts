@@ -1,6 +1,7 @@
 import { TokenPayload } from "../../type";
 import { GraphQLError } from "graphql/error";
 import { removeEvent } from "../../services/eventService";
+import { cancelNotificationForEvent } from "../../services/notificationService";
 
 const deleteEvent = async (
     _root: unknown,
@@ -16,6 +17,7 @@ const deleteEvent = async (
     }
 
     await removeEvent(eventId, tokenPayload.id);
+    await cancelNotificationForEvent(eventId);
 
     return "success";
 };
